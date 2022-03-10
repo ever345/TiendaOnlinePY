@@ -1,0 +1,41 @@
+{% url 'login' as login %}
+{% url 'register' as register %}
+{% url 'carts:cart' as cart %}
+
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a href="{% url 'products:index' %}"class="navbar-brand">StoreOnline</a>
+    <button type="button" name="button" class="navbar-toggler navbar-toggler-right" data-toggle="collapse"data-target="#navb">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="navb" class="navbar-collapse hide">
+        <ul class="navbar-nav">
+            <li class="new-item {% if request.path == cart %}activate {% endif %}">
+              <a href="{{cart}}" class="nav-link">
+                  mi carrito <span class="fas fa-shopping-cart"></span>
+              </a>   
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav ml-auto">
+            
+            {% if user.is_authenticated %}    
+            <li class="navbar-item">
+                <a href="{% url 'logout' %}" class="nav-link"> 
+                    <span class="fas fa-sign-out-alt"></span>Salir</a>
+            </li>
+            {% else %}
+            <li class="navbar-item {% if request.paht == login %}activate{% endif %}">
+                <a href="{{login}}" class="nav-link">
+                    <span class="fas fa-user"></span>
+                    Iniciar Sesion</a>
+            </li>
+            <li class="navbar-item {% if request.paht == register %}activate{% endif %}">
+                <a href="{{register}}" class="nav-link"> <span class="fas fa-sign-in-alt"></span>
+                    Registrarse</a>
+            </li>
+            
+           
+            {% endif %}
+        </ul>
+    </div>
+</nav>
