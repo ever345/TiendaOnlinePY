@@ -15,7 +15,12 @@
 <body>
     {% include 'base/navbar.html' %}
     <div class="container">
-        {% include 'base/messages.html' %}       
+        {% include 'base/messages.html' %}
+        
+        {% block breadcrumb %}
+            
+        {% endblock breadcrumb %}
+                   
         <div class="row mt-3">           
             {% block content %}
                 

@@ -6,7 +6,6 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.shortcuts import render
-
 from products.models import Products
 from StoreOnline.forms import RegisterForm
 from users.models import User

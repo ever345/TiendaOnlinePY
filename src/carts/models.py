@@ -6,6 +6,7 @@ from users.models import User
 from products.models import Products
 from django.db.models.signals import m2m_changed
 from django.db.models.signals import pre_save
+from django.db.models.signals import post_save
 
 
 class Cart(models.Model):
@@ -24,21 +25,51 @@ class Cart(models.Model):
     def update_totals(self):
         self.update_subtotals()
         self.update_total()
-       
+        
+        
+        if self.order:
+            self.order.update_total()
         
     def update_subtotals(self):
-        self.subtotal = sum([product.price for product in self.products.all()])
+        self.subtotal = sum([cp.quantify * cp.product.price for cp in self.products_related()])
         self.save()
         
     def update_total(self):
         self.total = self.subtotal + (self.subtotal * (decimal.Decimal(Cart.FEE)))
         self.save()
-   
+        
+    def products_related(self):
+        return self.cartproducts_set.select_related('product')
+    
+    @property
+    def order(self):
+        return self.order_set.first()
+    
+    
+    
+class CartProductsManager(models.Manager):
+        
+    def create_or_update_quantify(self,cart,product,quantify=1):
+        object, created = self.get_or_create(cart=cart,product=product)
+    
+        if not created:
+            quantify = object.quantify + quantify
+        object.update_quantify(quantify)
+        return object
+ 
 class CartProducts(models.Model):
     cart = models.ForeignKey(Cart,on_delete=models.CASCADE)
-    products = models.ForeignKey(Products,on_delete=models.CASCADE)
-    quantify = models.IntegerField(default=1)
+    product = models.ForeignKey(Products,on_delete=models.CASCADE)
+    quantify    = models.IntegerField(default=1)
     creat_at = models.DateField(auto_now_add=True)
+    
+    objects = CartProductsManager()
+    
+    def update_quantify(self, quantify=1):
+        self.quantify = quantify
+        self.save()
+        
+        
         
 def set_cart_id(sender,instance,*args,**kwargs):
     if not instance.cart_id:
@@ -46,6 +77,10 @@ def set_cart_id(sender,instance,*args,**kwargs):
     
 def update_totals(sender, instance, action, *args,**kwargs):
     if action == 'post_add' or action == 'post_remove' or action == 'post_clear':instance.update_totals()
+    
+def post_save_update_totals(sender,instance,*args,**kwargs):
+        instance.cart.update_totals()
         
 pre_save.connect(set_cart_id, sender=Cart)
+post_save.connect(post_save_update_totals, sender=CartProducts)
 m2m_changed.connect(update_totals, sender=Cart.products.through)

@@ -1,4 +1,4 @@
-from itertools import product
+
 from django.shortcuts import render,redirect,get_object_or_404
 from carts.utils import get_or_create_cart
 from carts.models import Cart
@@ -11,16 +11,20 @@ def cart(request):
 
 def add(request):
     cart = get_or_create_cart(request)
-    prod = get_object_or_404(Products,pk=request.POST.get('product_id'))
-    product = Products.objects.get(pk=request.POST.get('product_id'))
-    quantify = request.POST.get('quantify', 1)
-    
-    cart.products.add(product, through_defaults={
-        'quantify':quantify
-    })
+    product = get_object_or_404(Products,pk=request.POST.get('product_id'))
+    #product = Products.objects.get(pk=request.POST.get('product_id'))
+    print('vdfvsdnjvnskjhhvjhbdf',product)
+    quantify = int(request.POST.get('quantify', 1))
+    cart_product = CartProducts.objects.create_or_update_quantify(
+        cart=cart,
+        product=product,
+        quantify=quantify,
+    )
     
     return render(request, 'carts/add.html',{
-        'product':product
+        'quantify':quantify,
+        'cart_product':cart_product,
+        'product':product,
     })
     
 def remove(request):
