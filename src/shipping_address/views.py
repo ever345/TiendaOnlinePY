@@ -1,6 +1,9 @@
+from http.client import HTTPResponse
 from urllib import request
 from shipping_address.models import ShippingAddress
 from shipping_address.forms import ShippingAddressForm
+from carts.utils import get_or_create_cart
+from orders.utils import get_or_create_order
 from django.views import generic
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -11,6 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 
 @login_required(login_url='login')
 def create(request):
@@ -20,6 +24,14 @@ def create(request):
         shipping_address.user = request.user
         shipping_address.default = not request.user.has_shipping_address()
         shipping_address.save()
+        
+        if request.GET.get('next'):
+            if request.GET['next'] == reverse('orders:address'):
+                cart = get_or_create_cart(request)
+                order = get_or_create_order(cart, request)
+                order.update_shipping_address(shipping_address)
+                return HttpResponseRedirect(request.GET['next'])
+            
         messages.success(request,'Direccion creada con exito')
         return redirect('shipping_address:shipping_address')
     return render(request, 'create.html', {'form':form})

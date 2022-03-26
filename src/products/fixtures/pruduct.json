@@ -1,0 +1,50 @@
+[
+{
+    "model": "products.products",
+    "pk": 1,
+    "fields": {
+        "title": "fresa",
+        "description": "se venden por libras",
+        "price": "2.00",
+        "slug": "fresa",
+        "image": "madia/fresa_r6T8nfW.jpg",
+        "created_at": "2022-03-17T14:57:08.536Z"
+    }
+},
+{
+    "model": "products.products",
+    "pk": 2,
+    "fields": {
+        "title": "chookis",
+        "description": "se vende por paquetes",
+        "price": "2.64",
+        "slug": "chookis",
+        "image": "madia/chokis_black.jpg",
+        "created_at": "2022-03-26T01:03:45.737Z"
+    }
+},
+{
+    "model": "products.products",
+    "pk": 3,
+    "fields": {
+        "title": "empanada",
+        "description": "preparadas para hacer la fritacion, se venden por paquetes, vienen 10 unidades",
+        "price": "2.00",
+        "slug": "empanada",
+        "image": "madia/empanada.jpg",
+        "created_at": "2022-03-26T01:06:22.347Z"
+    }
+},
+{
+    "model": "products.products",
+    "pk": 4,
+    "fields": {
+        "title": "jugo hit",
+        "description": "se venden por paquetes, bienen 8 unidades",
+        "price": "3.00",
+        "slug": "jugo-hit",
+        "image": "madia/jugo_hit.jpg",
+        "created_at": "2022-03-26T01:08:40.894Z"
+    }
+}
+]
