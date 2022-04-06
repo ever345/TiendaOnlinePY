@@ -52,11 +52,14 @@ INSTALLED_APPS = [
     'carts',
     'categories',
     'orders',
+    'payments',
     'products',
+    'promo_code',
     'shipping_address',
     'users',
     
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

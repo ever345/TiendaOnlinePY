@@ -13,13 +13,13 @@
         </div>
         <div class="mt-2">
             
-            {% for shipping_address in shipping_address %}
+            {% for shipping_address in shipping_addresses %}
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="card-title">
                             <h5>{{shipping_address.address}}</h5>    
                             <p class="card-title">{{shipping_address.postal_code}}</p>   
-                            <a href="{% url 'orders:check_address' shipping_address.pk %}" class="btn btn-warding">Seleccione Direccion</a>                  
+                            <a href="{% url 'orders:check_address' shipping_address.pk %}" class="btn btn-warning">Seleccionar Direccion</a>                  
                         </div>
                     </div>
                 </div>

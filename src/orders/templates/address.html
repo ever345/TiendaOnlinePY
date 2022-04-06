@@ -4,7 +4,7 @@
 {% block breadcrumb %}
     {% include 'snippets/breadcrumb.html' %}
 {% endblock breadcrumb %}
-
+    
 
 {% block content %}
     <div class="col">
@@ -20,11 +20,9 @@
                 </div>
                 {% if can_choose_address %}
                     <div class="mt-2">
-                         <a href="{% url 'orders:select_address' %}">Elije una direccon</a>
+                        <a href="{% url 'orders:select_address' %}">Elije una direccon</a>
                     </div>
-                {% endif %}
-                    
-               
+                {% endif %}                  
             </div>
         {% else %}
             <div class="h3">
@@ -35,6 +33,6 @@
                 <a href="{% url 'shipping_address:create' %} ?next{{next_url}}">Nueva direccion de envio</a>
             </div>
         {% endif %}
-            
     </div>
 {% endblock content %}
+    

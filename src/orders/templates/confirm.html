@@ -41,9 +41,17 @@
                         <div class="font-weight-bold">
                             Codigo Promocional
                         </div>
-                        <form >
-                            <input type="text" name="code" value="" class="form-control" placeholder="Codigo Promocional">
+                        <form id="promocode-form" action="{% url 'promo_code:validar' %}">
+                            <input type="text" name="code" value="{{ order.promo_code.code }}" class="form-control" placeholder="Codigo Promocional" {% if order.promo_code %} readonly {% endif %}>
                         </form>
+                        <div class="text-success" id="promocode-success" style="font-size: 1em;">
+                            
+                            {% if order.promo_code %}
+                                codigo apliado exitosamente
+                            {% endif %}
+                                
+                            
+                        </div>
                     </div>                
                 </div>
             </div>
@@ -67,5 +75,39 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        const form= document.getElementById('promocode-form')
+        form.addEventListener('submit',function(e){
+            e.preventDefault()
+            const input = this.code
+            const code = input.value
+            const url = this.action +"?code="+code
+            const div_total = document.getElementById('order-total')
+            const div_success = document.getElementById('promocode-success')
+            console.log(url)
+
+            fetch(url)
+                .then(response => response.json())
+                .then(response => {
+                    if(response.status === true){
+                        div_total.innerHTML = "$" + response.total
+                        div_success.classList.remove('text-danger')
+                        div_success.classList.add('text-success')
+                        div_success.innerHTML = 'codigo aplicado de forma exitosa'
+
+                        input.readOnly = true
+                    }else{
+                        div_success.innerHTML = 'codigo no valido'
+                        div_success.classList.remove('text-success')
+                        div_success.classList.add('text-danger')
+                    }
+                
+                })
+        })
+    </script>
+{% endblock javascript %}
+    
     
     
